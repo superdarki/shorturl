@@ -10,11 +10,36 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const themeDark = createTheme({
     palette: {
-        background: {
-            default: "#222222"
+        
+    },
+    colorSchemes: {
+        dark: true
+    },
+    components: {
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    '& label.Mui-focused': {
+                        color: '#3E68A8',
+                    },
+                    '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                            borderColor: '#ffffff',
+                        },
+                        '&:hover fieldset': {
+                            borderColor: '#3E68A8',
+                        },
+                        '&.Mui-focused fieldset': {
+                            borderColor: '#3E68A8',
+                            borderWidth: '0.15rem'
+                        },
+                    },
+                }
+            }
         },
-        text: {
-            primary: "#ffffff"
+        MuiButton: {
+            styleOverrides: {
+            }
         }
     }
 });
