@@ -10,7 +10,7 @@ class DB:
         self.con.commit()
 
     def getall(self):
-        res = self.cur.execute("SELECT id, url FROM short")
+        res = self.cur.execute("SELECT id, url, created_at FROM short")
         return res.fetchall()
 
     def get(self, id: str):

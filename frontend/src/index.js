@@ -1,19 +1,39 @@
-import React from 'react';
-import ReactDOM from "react-dom";
-import { TextField, Button } from '@mui/material';
+import React, { StrictMode } from 'react';
+import { createRoot } from "react-dom/client";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
+import Typography from '@mui/material/Typography';
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-
-//import Links from './components/Link';
+import { purple } from '@mui/material/colors';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import Link from './components/Link';
 
 const themeDark = createTheme({
     palette: {
+        mode:'dark',
+        primary: purple,
+        contrastThreshold: 4.5,
         
     },
     colorSchemes: {
         dark: true
+    },
+    typography: {
+        fontFamily: [
+            'Roboto',
+        ].join(','),
+        h1: {
+            fontSize: '6.5rem',
+            fontWeight: 700
+        },
+        button: {
+            fontSize: '1.3rem',
+            fontWeight: 700
+        }
     },
     components: {
         MuiTextField: {
@@ -27,13 +47,13 @@ const themeDark = createTheme({
                             borderColor: '#ffffff',
                         },
                         '&:hover fieldset': {
-                            borderColor: '#3E68A8',
+                            borderWidth: '0.10rem'
                         },
                         '&.Mui-focused fieldset': {
-                            borderColor: '#3E68A8',
-                            borderWidth: '0.15rem'
-                        },
-                    },
+                            borderColor: purple,
+                            borderWidth: '0.10rem'
+                        }
+                    }
                 }
             }
         },
@@ -64,28 +84,9 @@ const App = () => {
                         display="flex"
                         justifyContent="center"
                     >
-                        <h1>ShortURL</h1>
+                        <Typography variant="h1">Short URL</Typography>
                     </Grid>
-                    <Grid 
-                        size="grow"
-                        display="flex"
-                        justifyContent="center"
-                    >
-                        <TextField
-                            hiddenLabel
-                            fullWidth
-                            id="link-to-shorten"
-                            variant="outlined"
-                            text
-                        />
-                    </Grid>
-                    <Grid 
-                        size="auto"
-                        display="flex"
-                        justifyContent="center"
-                    >
-                        <Button variant="contained">Shorten</Button>
-                    </Grid>
+                    <Link/>
                 </Grid>
             </Box>
         </ThemeProvider>
@@ -93,5 +94,12 @@ const App = () => {
   };
 
 
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+
+  const rootElement = document.getElementById("root");
+  const root = createRoot(rootElement);
+
+  root.render(
+    <StrictMode>
+        <App/>
+    </StrictMode>
+  )

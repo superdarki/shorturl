@@ -30,10 +30,11 @@ async def list(request: Request):
     res = []
     l = db.getall()
     for o in l:
+        print(o)
         res.append({
             "origin": o[1],
-            "short": str(request.base_url) + "s/" +o[0],
-            "created_at": o[3]
+            "short": str(request.base_url) + o[0],
+            "created_at": o[2]
         })
     return {
         "data": res
@@ -48,11 +49,11 @@ async def create(url: str, request: Request):
     return {
         "data": {
             "origin": url,
-            "short": str(request.base_url) + "s/" + id
+            "short": str(request.base_url) + id
         }
     }
 
-@app.get("/s/{id}")
+@app.get("/{id}")
 async def redirect(id: str):
     url = db.get(id)
     if not url:
