@@ -1,11 +1,14 @@
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import Depends, FastAPI, Request, HTTPException
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from secrets import token_urlsafe
 
-from lib.db import DB
+from sqlalchemy.orm import Session
+from db import crud, models, schemas
+from db.database import SessionLocal, engine
 
-db = DB("short.db")
+models.Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
 
 origins = [
@@ -21,41 +24,36 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 @app.get("/")
-async def root():
+async def root() -> str:
     return "Hello World"
 
 @app.get("/links")
-async def list(request: Request):
-    res = []
-    l = db.getall()
-    for o in l:
-        print(o)
-        res.append({
-            "origin": o[1],
-            "short": str(request.base_url) + o[0],
-            "created_at": o[2]
-        })
-    return {
-        "data": res
-    }
+async def list(request: Request, db: Session = Depends(get_db)) -> list[schemas.Short]:
+    res = crud.getall(db)
+    return res
 
 @app.post("/create")
-async def create(url: str, request: Request):
+async def create(url: str, request: Request, db: Session = Depends(get_db)) -> schemas.ShortResponse:
     id = token_urlsafe(8)
-    while (db.get(id)):
+    while (crud.get(db, id)):
         id = token_urlsafe(8)
-    db.add(id, url)
-    return {
-        "data": {
-            "origin": url,
-            "short": str(request.base_url) + id
-        }
+    res = crud.add(db, schemas.ShortCreate(id=id, url=url))
+    return  {
+        "short": str(request.base_url) + id,
+        "item": res
     }
 
 @app.get("/{id}")
-async def redirect(id: str):
-    url = db.get(id)
-    if not url:
-        raise HTTPException(status_code=404, detail="Short URL does not exists")
-    return RedirectResponse(url, 302)
+async def redirect(id: str, db: Session = Depends(get_db)): #-> RedirectResponse:
+    short = crud.get(db, id=id)
+    if short is None:
+        raise HTTPException(status_code=404, detail="Link not found")
+    return RedirectResponse(short.url, 302)

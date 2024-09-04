@@ -26,7 +26,7 @@ export default function Link() {
             setSubmit(true);
             const response = await fetch(api_url + "/create?url=" + link, { method: "POST" });
             const json = await response.json();
-            setShortLink(json.data.short);
+            setShortLink(json.short);
         } else {
             setValid(false);
         }
