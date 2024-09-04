@@ -13,7 +13,7 @@
                 "app.api:app",
                 "--reload"
             ],
-            "jinja": true
+            "jinja": false
         }
     ]
 }

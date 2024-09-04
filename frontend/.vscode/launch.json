@@ -8,9 +8,8 @@
             "type": "node",
             "request": "launch",
             "name": "Debug: Frontend",
-            "runtimeExecutable": "npm",
+            "runtimeExecutable": "react-scripts",
             "runtimeArgs": [
-                "run",
                 "start"
             ],
             "console": "integratedTerminal",
