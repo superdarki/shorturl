@@ -52,8 +52,8 @@ async def create(url: str, request: Request, db: Session = Depends(get_db)) -> s
     }
 
 @app.get("/{id}")
-async def redirect(id: str, db: Session = Depends(get_db)): #-> RedirectResponse:
+async def redirect(id: str, db: Session = Depends(get_db)) -> str:
     short = crud.get(db, id=id)
     if short is None:
         raise HTTPException(status_code=404, detail="Link not found")
-    return RedirectResponse(short.url, 302)
+    return short.url

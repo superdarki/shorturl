@@ -5,10 +5,10 @@ import Grid from "@mui/material/Grid2";
 import Typography from '@mui/material/Typography';
 import CssBaseline from "@mui/material/CssBaseline";
 
-import Link from './components/Link';
-import Dark from './themes/Dark';
+import Link from './Link';
+import Dark from '../themes/Dark';
 
-export default function App() {
+export default function Home() {
     return (
         <ThemeProvider theme={Dark}>
             <CssBaseline />
