@@ -7,5 +7,14 @@
 			"path": "./frontend"
 		}
 	],
-	"settings": {}
+	"settings": {},
+	"launch": {
+		"version": "0.2.0",
+		"compounds": [
+			{
+				"name": "Debug: Full Stack",
+				"configurations": ["Debug: Backend", "Debug: Frontend"]
+			}
+		]
+	}
 }
