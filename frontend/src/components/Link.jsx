@@ -24,7 +24,18 @@ export default function Link() {
         if (link && reg.test(link)) {
             setValid(true);
             setSubmit(true);
-            const response = await fetch(api_url + "/create?url=" + link, { method: "POST" });
+            const token = localStorage.getItem("token");  // Retrieve the JWT token from localStorage
+            const response = await fetch(api_url + "/create?url=" + encodeURIComponent(link), {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`  // Include the JWT token in the Authorization header
+                }
+            });
+            if (!response.ok) {
+                // Handle errors
+                throw new Error('Request failed');
+            }            
             const json = await response.json();
             setShortLink(window.location.origin + "/" + json.id);
         } else {

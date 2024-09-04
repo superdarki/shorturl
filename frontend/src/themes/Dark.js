@@ -23,6 +23,9 @@ export default createTheme({
             fontSize: '6.5rem',
             fontWeight: 700
         },
+        h2: {
+            fontWeight: 700
+        },
         button: {
             fontSize: '1.3rem',
             fontWeight: 700
