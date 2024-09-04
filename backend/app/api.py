@@ -12,12 +12,11 @@ def get_db():
     finally:
         db.close()
 
-# AUTODELETE
-from apscheduler.schedulers.background import BackgroundScheduler
-
-scheduler = BackgroundScheduler()
-scheduler.add_job(crud.delete_old_records, args=(get_db()), trigger='interval', seconds=30)  # Runs daily
-scheduler.start()
+# # AUTODELETE
+# from apscheduler.schedulers.background import BackgroundScheduler
+# scheduler = BackgroundScheduler()
+# scheduler.add_job(crud.delete_old_records, args=(get_db()), trigger='interval', days=1)
+# scheduler.start()
 
 # API
 from fastapi import Depends, FastAPI, Request, HTTPException

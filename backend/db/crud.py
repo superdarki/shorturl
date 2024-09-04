@@ -19,10 +19,10 @@ def add(db: Session, short: schemas.Short):
 def delete_old_records(db: Session):
     print("Deleting old records")
 
-    one_month_ago = datetime.datetime.now() - datetime.timedelta(minutes=2)
+    delta = datetime.datetime.now() - datetime.timedelta(days=10)
 
     try:
-        db.query(models.Short).filter(models.Short.created_at < one_month_ago).delete()
+        db.query(models.Short).filter(models.Short.created_at < delta).delete()
         db.commit()
     except Exception as e:
         db.rollback()
