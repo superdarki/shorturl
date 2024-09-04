@@ -21,7 +21,7 @@ export default function Link() {
     }
 
     async function handleSubmit() {
-        if (reg.test(link)) {
+        if (link && reg.test(link)) {
             setValid(true);
             setSubmit(true);
             const response = await fetch(api_url + "/create?url=" + link, { method: "POST" });
@@ -55,7 +55,12 @@ export default function Link() {
                         error={!valid}
                         text
                         onChange={handleInput}
-                        onSubmit={handleSubmit}
+                        onKeyDown={(ev) => {
+                            if (ev.key === 'Enter') {
+                                handleSubmit()
+                                ev.preventDefault()
+                            }
+                        }}
                     />
                 </Grid>
                 <Grid 
