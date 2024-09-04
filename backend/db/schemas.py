@@ -13,10 +13,3 @@ class Short(ShortCreate):
 
     class Config:
         from_attributes = True
-
-class ShortResponse(BaseModel):
-    short: str
-    item: Short
-
-    class Config:
-        from_attributes = True

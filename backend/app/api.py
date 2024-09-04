@@ -41,15 +41,12 @@ async def list(request: Request, db: Session = Depends(get_db)) -> list[schemas.
     return res
 
 @app.post("/create")
-async def create(url: str, request: Request, db: Session = Depends(get_db)) -> schemas.ShortResponse:
+async def create(url: str, request: Request, db: Session = Depends(get_db)) -> schemas.Short:
     id = token_urlsafe(8)
     while (crud.get(db, id)):
         id = token_urlsafe(8)
     res = crud.add(db, schemas.ShortCreate(id=id, url=url))
-    return  {
-        "short": str(request.base_url) + id,
-        "item": res
-    }
+    return res
 
 @app.get("/{id}")
 async def redirect(id: str, db: Session = Depends(get_db)) -> str:
