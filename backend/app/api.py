@@ -1,13 +1,29 @@
-from fastapi import Depends, FastAPI, Request, HTTPException
-from fastapi.responses import RedirectResponse
-from fastapi.middleware.cors import CORSMiddleware
-from secrets import token_urlsafe
-
+# DB
 from sqlalchemy.orm import Session
 from db import crud, models, schemas
 from db.database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# AUTODELETE
+from apscheduler.schedulers.background import BackgroundScheduler
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(crud.delete_old_records, args=(get_db()), trigger='interval', seconds=30)  # Runs daily
+scheduler.start()
+
+# API
+from fastapi import Depends, FastAPI, Request, HTTPException
+from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
+from secrets import token_urlsafe
 
 app = FastAPI()
 
@@ -23,13 +39,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @app.get("/")
 async def root() -> str:

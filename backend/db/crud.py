@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+import datetime
 
 from . import models, schemas
 
@@ -14,3 +15,17 @@ def add(db: Session, short: schemas.Short):
     db.commit()
     db.refresh(db_short)
     return db_short
+
+def delete_old_records(db: Session):
+    print("Deleting old records")
+
+    one_month_ago = datetime.datetime.now() - datetime.timedelta(minutes=2)
+
+    try:
+        db.query(models.Short).filter(models.Short.created_at < one_month_ago).delete()
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        print(f"An error occurred: {e}")
+    finally:
+        db.close()
