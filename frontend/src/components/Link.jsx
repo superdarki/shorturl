@@ -3,7 +3,7 @@ import { TextField, Button } from '@mui/material';
 import Grid from "@mui/material/Grid2";
 
 const api_url = "http://localhost:8000"
-const reg = new RegExp(/(^$|(http(s)?:\/\/)([\w-]+\.)+[\w-]+([\w- ;,.\/?%&=]*))/);
+const reg = /(^$|(http(s)?:\/\/)([\w-]+\.)+[\w-]+([\w- ;,./?%&=]*))/;
 
 const LinkContext = React.createContext({
     link: "", shortLink: "", submited: false, valid: true
@@ -15,27 +15,27 @@ export default function Link() {
     const [submited, setSubmit] = useState(false)
     const [valid, setValid] = useState(true);
 
-    const handleInput = async event  => {
-        setLink(event.target.value)
-        setValid(true)
+    async function handleInput(event) {
+        setLink(event.target.value);
+        setValid(true);
     }
 
-    const handleSubmit = async () => {
+    async function handleSubmit() {
         if (reg.test(link)) {
-            setValid(true)
-            setSubmit(true)
-            const response = await fetch(api_url + "/create?url=" + link, {method: "POST"})
-            const json = await response.json()
-            setShortLink(json.data.short)
+            setValid(true);
+            setSubmit(true);
+            const response = await fetch(api_url + "/create?url=" + link, { method: "POST" });
+            const json = await response.json();
+            setShortLink(json.data.short);
         } else {
-            setValid(false)
+            setValid(false);
         }
     }
 
-    const goBack = async () => {
-        setSubmit(false)
-        setLink("")
-        setShortLink("")
+    async function goBack() {
+        setSubmit(false);
+        setLink("");
+        setShortLink("");
     }
     
     if (!submited) {
@@ -47,7 +47,7 @@ export default function Link() {
                     justifyContent="center"
                 >
                     <TextField
-                        hiddenLabel
+                        label="Enter the link to shorten"
                         fullWidth
                         id="link-to-shorten"
                         variant="outlined"
@@ -81,7 +81,7 @@ export default function Link() {
                     justifyContent="center"
                 >
                     <TextField
-                        hiddenLabel
+                        label="Your link :"
                         fullWidth
                         value={shortLink}
                         id="short-link"
