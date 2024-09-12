@@ -9,7 +9,7 @@ env:
 
 jobs:
   backend:
-    name: Push Backend image to ${{ env.REGISTRY }}
+    name: Backend
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -52,7 +52,7 @@ jobs:
           push-to-registry: true
 
   frontend:
-    name: Push Frontend image to ${{ env.REGISTRY }}
+    name: Frontend
     runs-on: ubuntu-latest
     permissions:
       packages: write
