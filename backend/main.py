@@ -4,6 +4,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 import starlette.status as status
 from sqlalchemy.orm import Session
+from os import getenv
 from typing import Annotated
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
@@ -15,7 +16,7 @@ from db import crud, models, schemas
 from db.database import SessionLocal, engine
 
 # Constants for JWT
-SECRET_KEY = "mysupersecretkey123f"
+SECRET_KEY = getenv("JWT_SECRET_KEY", "mysupersecretkey1234")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
