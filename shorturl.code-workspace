@@ -1,10 +1,6 @@
 {
 	"folders": [
 		{
-			"name": "root",
-			"path": "."
-		},
-		{
 			"name": "backend",
 			"path": "./backend"
 		},
@@ -19,6 +15,9 @@
 		},
 		"files.exclude": {
 			"**/.git": true,
+			"**/node_modules": true,
+			"**/__pycache__": true,
+			"**/.venv": true,
 			"backend": true,
 			"frontend": true,
 		}
@@ -29,6 +28,34 @@
 			{
 				"name": "Debug: Full Stack",
 				"configurations": ["Debug: Backend", "Debug: Frontend"]
+			}
+		],
+		"configurations": [
+
+		]
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "Docker: Compose Up",
+				"type": "shell",
+				"command": "docker-compose up --build -d",
+				"group": {
+				  	"kind": "build",
+				  	"isDefault": true
+				},
+				"problemMatcher": []
+			},
+			{
+				"label": "Docker: Compose Down",
+				"type": "shell",
+				"command": "docker-compose down",
+				"group": {
+				  	"kind": "build",
+				  	"isDefault": false
+				},
+				"problemMatcher": []
 			}
 		]
 	}
