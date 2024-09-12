@@ -1,13 +1,28 @@
 {
 	"folders": [
 		{
+			"name": "root",
+			"path": "."
+		},
+		{
+			"name": "backend",
 			"path": "./backend"
 		},
 		{
+			"name": "frontend",
 			"path": "./frontend"
 		}
 	],
-	"settings": {},
+	"settings": {
+		"search.exclude": {
+			"**/node_modules": true,
+		},
+		"files.exclude": {
+			"**/.git": true,
+			"backend": true,
+			"frontend": true,
+		}
+	},
 	"launch": {
 		"version": "0.2.0",
 		"compounds": [

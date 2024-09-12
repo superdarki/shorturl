@@ -3,7 +3,7 @@ import { TextField, Button } from '@mui/material';
 import Grid from "@mui/material/Grid2";
 
 const api_url = process.env.REACT_APP_API_URL
-const reg = /(^$|(http(s)?:\/\/)([\w-]+\.)+[\w-]+([\w- ;,./?%&=]*))/;
+const reg = /(^$|(http(s)?:\/\/)(localhost|([\w-]+\.)+[\w-]+)(:\d+)?([\w- ;,./?%&=]*))/;
 
 const LinkContext = createContext({
     link: "", shortLink: "", submited: false, valid: true
