@@ -15,7 +15,7 @@ from db import crud, models, schemas
 from db.database import SessionLocal, engine
 
 # Constants for JWT
-SECRET_KEY = "your-secret-key"
+SECRET_KEY = "mysupersecretkey123f"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
