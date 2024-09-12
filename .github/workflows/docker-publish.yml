@@ -31,6 +31,8 @@ jobs:
         with:
           images: |
             ghcr.io/superdarki/shorturl-backend
+          tags: |
+            type=sha,enable=true,priority=100,prefix=,suffix=,format=short
 
       - name: Build and push Docker image
         id: push
@@ -75,7 +77,7 @@ jobs:
           images: |
             ghcr.io/superdarki/shorturl-frontend
           tags: |
-            type=sha
+            type=sha,enable=true,priority=100,prefix=,suffix=,format=short
 
       - name: Build and push Docker image
         id: push
