@@ -8,12 +8,10 @@
             "name": "Debug: Backend",
             "type": "debugpy",
             "request": "launch",
-            "module": "uvicorn",
+            "module": "fastapi",
             "args": [
-                "app.api:app",
-                "--reload"
-            ],
-            "jinja": false
+                "dev"
+            ]
         }
     ]
 }
