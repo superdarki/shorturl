@@ -32,7 +32,8 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: superdarki/shorturl-backend
+          images: |
+            ghcr.io/superdarki/shorturl-backend
 
       - name: Build and push Docker image
         id: push
@@ -75,7 +76,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            superdarki/shorturl-frontend
             ghcr.io/superdarki/shorturl-frontend
           tags: |
             type=sha
