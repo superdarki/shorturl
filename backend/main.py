@@ -1,6 +1,8 @@
 from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
+import starlette.status as status
 from sqlalchemy.orm import Session
 from typing import Annotated
 from datetime import datetime, timedelta
@@ -65,7 +67,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 # User authentication and authorization
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
-        status_code=401,
+        status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
@@ -86,13 +88,13 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
 # Routes
 @app.get("/")
 async def root() -> str:
-    return "Hello World"
+    return RedirectResponse(url="/docs", status_code=status.HTTP_302_FOUND)
 
 @app.post("/token")
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
     user = crud.get_user_by_username(db, username=form_data.username)
     if not user or not verify_password(form_data.password, user.hashed_password):
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
     
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
@@ -105,7 +107,7 @@ async def register(form_data: OAuth2PasswordRequestForm = Depends(), db: Session
     # Check if the username is already taken
     db_user = crud.get_user_by_username(db, username=form_data.username)
     if db_user:
-        raise HTTPException(status_code=400, detail="Username already registered")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already registered")
     
     # Hash the password
     hashed_password = get_password_hash(form_data.password)
@@ -124,7 +126,7 @@ async def list_links(current_user: Annotated[schemas.User, Depends(get_current_u
 @app.get("/links")
 async def list_links(current_user: Annotated[schemas.User, Depends(get_current_user)], db: Session = Depends(get_db)) -> list[schemas.Short]:
     if (current_user.username != 'admin'):
-        raise HTTPException(status_code=401, detail='Access denied')
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Access denied')
     res = crud.get_all(db)
     return res
 
@@ -140,5 +142,5 @@ async def create_link(url: str, current_user: Annotated[schemas.User, Depends(ge
 async def redirect_link(id: str, db: Session = Depends(get_db)) -> str:
     short = crud.get(db, id=id)
     if short is None:
-        raise HTTPException(status_code=404, detail="Link not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Link not found")
     return short.url
