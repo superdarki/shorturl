@@ -8,12 +8,14 @@
             "type": "node",
             "request": "launch",
             "name": "Debug: Frontend",
-            "runtimeExecutable": "react-scripts",
+            "runtimeExecutable": "npm",
             "runtimeArgs": [
+                "run",
                 "start"
             ],
-            "console": "integratedTerminal",
-            "skipFiles": ["<node_internals>/**"]
+            "console": "internalConsole",
+            "skipFiles": ["<node_internals>/**"],
+            "autoAttachChildProcesses": true
         }
     ]
 }

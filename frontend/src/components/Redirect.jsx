@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-const api_url = process.env.REACT_APP_API_URL;
+const api_url = window._env_.API_URL;
 
 export default function Redirect() {
     const { id } = useParams();

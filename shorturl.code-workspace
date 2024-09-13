@@ -1,6 +1,10 @@
 {
 	"folders": [
 		{
+			"name": "root",
+			"path": "."
+		},
+		{
 			"name": "backend",
 			"path": "./backend"
 		},
@@ -37,10 +41,10 @@
 	"tasks": {
 		"version": "2.0.0",
 		"tasks": [
-			{
+			{	
 				"label": "Docker: Compose Up",
 				"type": "shell",
-				"command": "docker-compose up --build -d",
+				"command": "docker-compose -f docker-compose.dev.yml up --build -d",
 				"group": {
 				  	"kind": "build",
 				  	"isDefault": true
@@ -50,7 +54,7 @@
 			{
 				"label": "Docker: Compose Down",
 				"type": "shell",
-				"command": "docker-compose down",
+				"command": "docker-compose -f docker-compose.dev.yml down",
 				"group": {
 				  	"kind": "build",
 				  	"isDefault": false

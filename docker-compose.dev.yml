@@ -18,17 +18,25 @@ services:
 
   frontend:
     container_name: frontend
-    image: ghcr.io/superdarki/shorturl-frontend
+    build:
+      context: frontend
+      dockerfile: Dockerfile
     environment:
       - API_URL=http://localhost/api
+    ports:
+      - 3000:80
     networks:
       shorturl:
 
   backend:
     container_name: backend
-    image: ghcr.io/superdarki/shorturl-backend
+    build:
+      context: backend
+      dockerfile: Dockerfile
     environment:
       - DATABASE_URL=postgresql://shorturl:shorturl@db/shorturl
+    ports:
+      - 8000:8000
     depends_on:
       - db
     networks:
@@ -41,6 +49,8 @@ services:
       - POSTGRES_USER=shorturl
       - POSTGRES_PASSWORD=shorturl
       - POSTGRES_DATABASE=shorturl
+    ports:
+      - 5432:5432
     volumes:
       - volume-pgdata:/var/lib/postgresql/data
     networks:
@@ -48,6 +58,8 @@ services:
 
   adminer:
     image: adminer
+    ports:
+      - 8080:8080
     networks:
       shorturl:
 

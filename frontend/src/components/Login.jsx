@@ -5,11 +5,11 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
-const api_url = process.env.REACT_APP_API_URL;  // Use the environment variable for the API URL
+const api_url = window._env_.API_URL;
 
 export default function Login({ setToken }) {
-    const [isRegister, setIsRegister] = useState(false);  // State to toggle between login and register
-    const [error, setError] = useState(null);  // State to manage error messages
+    const [isRegister, setIsRegister] = useState(false);
+    const [error, setError] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();

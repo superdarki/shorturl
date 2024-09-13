@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 import { TextField, Button } from '@mui/material';
 import Grid from "@mui/material/Grid2";
 
-const api_url = process.env.REACT_APP_API_URL
+const api_url = window._env_.API_URL
 const reg = /(^$|(http(s)?:\/\/)(localhost|([\w-]+\.)+[\w-]+)(:\d+)?([\w- ;,./?%&=]*))/;
 
 const LinkContext = createContext({
