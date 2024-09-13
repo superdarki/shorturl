@@ -34,13 +34,13 @@ def get_db():
     finally:
         db.close()
 
-# CORS setup
-origins = ["http://localhost:3000", "localhost:3000"]
+
 app = FastAPI()
 
+# CORS setup
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["http://localhost:3000", "localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -88,8 +88,8 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
 
 # Routes
 @app.get("/")
-async def root() -> str:
-    return RedirectResponse(url="/docs", status_code=status.HTTP_302_FOUND)
+async def root(request: Request) -> str:
+    return RedirectResponse(url="docs", status_code=status.HTTP_302_FOUND)
 
 @app.post("/token")
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
@@ -145,3 +145,5 @@ async def redirect_link(id: str, db: Session = Depends(get_db)) -> str:
     if short is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Link not found")
     return short.url
+
+app.mount("/api", app)
