@@ -10,9 +10,12 @@ services:
     volumes:
       - ./revproxy.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
-      - backend
-      - frontend
-      - adminer
+      backend:
+        condition: service_started
+      frontend:
+        condition: service_started
+      adminer:
+        condition: service_started
     networks:
       shorturl:
 
@@ -20,7 +23,10 @@ services:
     container_name: frontend
     image: ghcr.io/superdarki/shorturl-frontend
     environment:
-      - API_URL=http://localhost/api
+      API_URL: "http://localhost/api"
+    depends_on:
+      backend:
+        condition: service_started
     networks:
       shorturl:
 
@@ -28,9 +34,10 @@ services:
     container_name: backend
     image: ghcr.io/superdarki/shorturl-backend
     environment:
-      - DATABASE_URL=postgresql://shorturl:shorturl@db/shorturl
+      DATABASE_URL: "postgresql://shorturl:shorturl@db/shorturl"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       shorturl:
 
@@ -38,16 +45,26 @@ services:
     container_name: db
     image: postgres
     environment:
-      - POSTGRES_USER=shorturl
-      - POSTGRES_PASSWORD=shorturl
-      - POSTGRES_DATABASE=shorturl
+      POSTGRES_USER: "shorturl"
+      POSTGRES_PASSWORD: "shorturl"
+      POSTGRES_DATABASE: "shorturl"
     volumes:
       - volume-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DATABASE}"]
+      interval: 5s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
     networks:
       shorturl:
 
   adminer:
+    container_name: adminer
     image: adminer
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
       shorturl:
 
