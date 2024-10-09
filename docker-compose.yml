@@ -21,6 +21,9 @@ services:
 
   frontend:
     container_name: frontend
+    build:
+      context: frontend
+      dockerfile: Dockerfile
     image: ghcr.io/superdarki/shorturl-frontend
     environment:
       API_URL: "http://localhost/api"
@@ -32,6 +35,9 @@ services:
 
   backend:
     container_name: backend
+    build:
+      context: backend
+      dockerfile: Dockerfile
     image: ghcr.io/superdarki/shorturl-backend
     environment:
       DATABASE_URL: "postgresql://shorturl:shorturl@db/shorturl"

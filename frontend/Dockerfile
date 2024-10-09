@@ -14,17 +14,18 @@ RUN npm run build
 # FINAL IMAGE
 FROM nginx:alpine
 
-RUN rm -rf /usr/share/nginx/html/*
-RUN apk add --no-cache bash
-
 WORKDIR /usr/share/nginx/html
 
-COPY --from=build /app/build .
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN rm -rf /usr/share/nginx/html/*
+RUN apk add --no-cache bash
 
 COPY ./.env .
 COPY ./env.sh .
 RUN chmod +x env.sh
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+COPY --from=build /app/build .
 
 EXPOSE 80
 
