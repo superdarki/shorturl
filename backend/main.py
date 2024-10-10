@@ -34,8 +34,9 @@ def get_db():
     finally:
         db.close()
 
+ROOT_PATH = getenv("API_ROOT_PATH", "")
 
-app = FastAPI()
+app = FastAPI(root_path=ROOT_PATH)
 
 # CORS setup
 app.add_middleware(
@@ -145,5 +146,3 @@ async def redirect_link(id: str, db: Session = Depends(get_db)) -> str:
     if short is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Link not found")
     return short.url
-
-app.mount("/api", app)

@@ -41,6 +41,7 @@ services:
     image: ghcr.io/superdarki/shorturl-backend
     environment:
       DATABASE_URL: "postgresql://shorturl:shorturl@db/shorturl"
+      API_ROOT_PATH: "/api"
     depends_on:
       db:
         condition: service_healthy
@@ -49,7 +50,7 @@ services:
 
   db:
     container_name: db
-    image: postgres
+    image: postgres:alpine
     environment:
       POSTGRES_USER: "shorturl"
       POSTGRES_PASSWORD: "shorturl"
