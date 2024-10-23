@@ -35,11 +35,10 @@ export default function Link() {
                 })
             });
             if (!response.ok) {
-                // Handle errors
                 throw new Error('Request failed');
             }            
             const json = await response.json();
-            setShortLink(window.location.origin + "/" + json.id);
+            setShortLink(window.location.origin + window.location.pathname + "/" + json.id);
         } else {
             setValid(false);
         }
