@@ -19,18 +19,19 @@ export default function Login({ setToken }) {
         const password = data.get("password");
 
         try {
-            const url = isRegister ? `${api_url}/register` : `${api_url}/token`;
-
-            const formData = new URLSearchParams();
-            formData.append('username', username);
-            formData.append('password', password);
+            const url = isRegister ? `${api_url}/register` : `${api_url}/login`;
 
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',  // Specify JSON content type
+                    'Accept': 'application/json',         // Good to specify
                 },
-                body: formData.toString(),
+                body: JSON.stringify({                  // Convert object to JSON string
+                    username: username,                  // Use variables for dynamic data
+                    password: password
+                }),
+                credentials: 'include',                 // Include credentials (cookies)
             });
 
             if (!response.ok) {
@@ -40,11 +41,9 @@ export default function Login({ setToken }) {
 
             if (!isRegister) {
                 const result = await response.json();
-                const { access_token } = result;
-
-                // Store the JWT token in localStorage and update state
-                localStorage.setItem("token", access_token);
-                setToken(access_token);
+                const { access_token } = result; // You can remove this line if you don't need to use the token
+                // Since we're using cookies, you don't need to store the token in localStorage
+                setToken(access_token); // Optionally, you can keep this to update the parent state if needed
             } else {
                 // If registering, switch back to login view after successful registration
                 setIsRegister(false);

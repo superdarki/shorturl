@@ -2,17 +2,17 @@ import { createContext, useState } from "react";
 import { TextField, Button } from '@mui/material';
 import Grid from "@mui/material/Grid2";
 
-const api_url = window._env_.API_URL
+const api_url = window._env_.API_URL;
 const reg = /(^$|(http(s)?:\/\/)(localhost|([\w-]+\.)+[\w-]+)(:\d+)?([\w- ;,./?%&=]*))/;
 
 const LinkContext = createContext({
     link: "", shortLink: "", submited: false, valid: true
-})
+});
 
 export default function Link() {
-    const [link, setLink] = useState("")
-    const [shortLink, setShortLink] = useState("")
-    const [submited, setSubmit] = useState(false)
+    const [link, setLink] = useState("");
+    const [shortLink, setShortLink] = useState("");
+    const [submited, setSubmit] = useState(false);
     const [valid, setValid] = useState(true);
 
     async function handleInput(event) {
@@ -24,18 +24,25 @@ export default function Link() {
         if (link && reg.test(link)) {
             setValid(true);
             setSubmit(true);
-            const token = localStorage.getItem("token");  // Retrieve the JWT token from localStorage
-            const response = await fetch(api_url + "/create?url=" + encodeURIComponent(link), {
+
+            // Removed token retrieval from localStorage
+            const response = await fetch(api_url + "/create", {
                 method: "POST",
+                credentials: 'include', // Include cookies in the request
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`  // Include the JWT token in the Authorization header
-                }
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    url: link,
+                    // No need to send token here as it is handled by cookies
+                })
             });
+
             if (!response.ok) {
                 // Handle errors
                 throw new Error('Request failed');
-            }            
+            }
+
             const json = await response.json();
             setShortLink(window.location.origin + "/" + json.id);
         } else {
@@ -51,7 +58,7 @@ export default function Link() {
     
     if (!submited) {
         return (
-            <LinkContext.Provider value={{link, shortLink, submited, valid}}>
+            <LinkContext.Provider value={{ link, shortLink, submited, valid }}>
                 <Grid 
                     size="grow"
                     display="flex"
@@ -68,8 +75,8 @@ export default function Link() {
                         onChange={handleInput}
                         onKeyDown={(ev) => {
                             if (ev.key === 'Enter') {
-                                handleSubmit()
-                                ev.preventDefault()
+                                handleSubmit();
+                                ev.preventDefault();
                             }
                         }}
                     />
@@ -90,7 +97,7 @@ export default function Link() {
         )
     } else {
         return (
-            <LinkContext.Provider value={{link, shortLink, submited, valid}}>
+            <LinkContext.Provider value={{ link, shortLink, submited, valid }}>
                 <Grid 
                     size="grow"
                     display="flex"

@@ -13,7 +13,7 @@ Statut de build des images :
 
 - `GET /` : la partie visuelle du frontend n'utilise que cet endpoint
 - `GET /<id:string>` : redirections des url raccourcies
-- `POST /api/token` : permet d'obtenir un cookie de connexion
+- `POST /api/login` : permet d'obtenir un cookie de connexion
 - `POST /api/register` : permet d'enregister un nouvel utilisateur
 - `GET /api/mylinks` : permet d'obtenir la liste des liens créés par l'utilisateur connecté
 - `GET /api/links` : permet d'obtenir la liste de tous les liens (uniquement utilisable par "admin")
