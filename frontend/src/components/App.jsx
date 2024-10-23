@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,9 +13,11 @@ export default function App() {
         <ThemeProvider theme={Dark}>
             <CssBaseline />
             <Router>
-                <Route path="/" element={<Home />} />
-                <Route path="/:id" element={<Redirect />} />
-                <Route path="*" element={<Home />} />
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/:id" element={<Redirect />} />
+                    <Route path="*" element={<Home />} />
+                </Routes>
             </Router>
         </ThemeProvider>
     );
