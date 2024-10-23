@@ -38,7 +38,7 @@ export default function Link() {
                 throw new Error('Request failed');
             }            
             const json = await response.json();
-            setShortLink(window.location.origin + window.location.pathname + "/" + json.id);
+            setShortLink(window.location.origin + window.location.pathname + json.id);
         } else {
             setValid(false);
         }
