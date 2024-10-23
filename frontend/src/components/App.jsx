@@ -12,12 +12,15 @@ export default function App() {
     return (
         <ThemeProvider theme={Dark}>
             <CssBaseline />
+            <Home />
+            {/*
             <Router>
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/:id" element={<Redirect />} />
                 </Routes>
             </Router>
+            */}
         </ThemeProvider>
     );
 };
