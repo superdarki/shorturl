@@ -24,13 +24,15 @@ export default function Link() {
         if (link && reg.test(link)) {
             setValid(true);
             setSubmit(true);
-            const token = localStorage.getItem("token");  // Retrieve the JWT token from localStorage
+            const token = localStorage.getItem("token");
             const response = await fetch(api_url + "/create?url=" + encodeURIComponent(link), {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`  // Include the JWT token in the Authorization header
-                }
+                },
+                body: JSON.stringify({
+                    token: token
+                })
             });
             if (!response.ok) {
                 // Handle errors
