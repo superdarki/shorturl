@@ -12,7 +12,7 @@ COPY ./src/ ./src
 RUN npm run build
 
 # FINAL IMAGE
-FROM nginx:alpine as final
+FROM nginx:alpine AS final
 
 WORKDIR /usr/share/nginx/html
 
