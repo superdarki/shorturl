@@ -9,20 +9,8 @@ import Link from './Link';
 
 const api_url = window._env_.API_URL;
 
-function getCookie(name) {
-    let cookieArr = document.cookie.split(";");
-    for (let i = 0; i < cookieArr.length; i++) {
-        let cookiePair = cookieArr[i].split("=");
-        if (name === cookiePair[0].trim()) {
-            return decodeURIComponent(cookiePair[1]);
-        }
-    }
-    return null;
-}
-
 export default function Home() {
     const [loggedIn, setLoggedIn] = useState(false);
-    const token = getCookie('token');
 
     if (!loggedIn) {
         return <Login setLoggedIn={setLoggedIn} />;
@@ -35,7 +23,6 @@ export default function Home() {
         })
         .then(response => {
             if (response.ok) {
-                console.log('Logged out successfully');
                 setLoggedIn(false)
             } else {
                 console.error('Failed to log out');
