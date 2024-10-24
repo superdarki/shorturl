@@ -8,7 +8,7 @@ import Redirect from "./Redirect";
 const app_path = window._env_.APP_PATH;
 
 export default function App() {
-    if (window.location.pathname == app_path) {
+    if (window.location.pathname.replace(/^\/+|\/+$/g, "") == app_path.replace(/^\/+|\/+$/g, "")) {
         return (
             <ThemeProvider theme={Dark}>
                 <CssBaseline />
