@@ -6,8 +6,7 @@ const app_path = window._env_.APP_PATH;
 export default function Redirect() {
     const [error, setError] = useState(null);
 
-    const id = window.location.pathname.replace(app_path, '')
-    while (id.charAt(0) == '/') id = id.substring(1);
+    const id = window.location.pathname.replace(app_path, '').replace(/^\/+|\/+$/g, '')
 
     useEffect(() => {
         fetch(`${api_url}/${id}`, { method: 'GET', credentials: 'include' })

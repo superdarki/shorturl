@@ -8,9 +8,6 @@ import Redirect from "./Redirect";
 const app_path = window._env_.APP_PATH;
 
 export default function App() {
-    console.log(window.location.pathname)
-    console.log(app_path)
-    console.log(window.location.pathname.replace(/^\/+|\/+$/g, "") == app_path.replace(/^\/+|\/+$/g, ""))
     if (window.location.pathname.replace(/^\/+|\/+$/g, "") == app_path.replace(/^\/+|\/+$/g, "")) {
         return (
             <ThemeProvider theme={Dark}>
