@@ -7,17 +7,43 @@ import Button from "@mui/material/Button";
 import Login from './Login';
 import Link from './Link';
 
-export default function Home() {
-    const [token, setToken] = useState(localStorage.getItem("token")); // Load token from localStorage
+const api_url = window._env_.API_URL;
 
-    if (!token) {
-        return <Login setToken={setToken} />;
+function getCookie(name) {
+    let cookieArr = document.cookie.split(";");
+    for (let i = 0; i < cookieArr.length; i++) {
+        let cookiePair = cookieArr[i].split("=");
+        if (name === cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    return null;
+}
+
+export default function Home() {
+    const [loggedIn, setLoggedIn] = useState(false);
+    const token = getCookie('token');
+
+    if (!loggedIn) {
+        return <Login setLoggedIn={setLoggedIn} />;
     }
 
     const handleLogout = () => {
-        // Clear token from localStorage and state
-        localStorage.removeItem("token");
-        setToken(null);  // Reset token state
+        fetch(`${api_url}/logout`, {
+            method: 'POST',
+            credentials: 'include'
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Logged out successfully');
+                setLoggedIn(false)
+            } else {
+                console.error('Failed to log out');
+            }
+        })
+        .catch(error => {
+            console.error('Error logging out:', error);
+        });
     };
 
     return (

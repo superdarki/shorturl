@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
@@ -7,7 +7,7 @@ import Container from "@mui/material/Container";
 
 const api_url = window._env_.API_URL;
 
-export default function Login({ setToken }) {
+export default function Login({ setLoggedIn }) {
     const [isRegister, setIsRegister] = useState(false);
     const [error, setError] = useState(null);
 
@@ -27,6 +27,7 @@ export default function Login({ setToken }) {
 
             const response = await fetch(url, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
@@ -34,24 +35,16 @@ export default function Login({ setToken }) {
             });
 
             if (!response.ok) {
-                // Handle error if the response status is not OK (e.g., 400 or 401)
                 throw new Error(isRegister ? "Registration failed" : "Invalid username or password");
             }
 
-            if (!isRegister) {
-                const result = await response.json();
-                const { access_token } = result;
-
-                // Store the JWT token in localStorage and update state
-                localStorage.setItem("token", access_token);
-                setToken(access_token);
-            } else {
-                // If registering, switch back to login view after successful registration
+            if (isRegister) {
                 setIsRegister(false);
+            } else {
+                setLoggedIn(true)
             }
 
         } catch (error) {
-            // Handle errors
             setError(error.message);
         }
     };

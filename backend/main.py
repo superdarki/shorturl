@@ -1,11 +1,11 @@
-from fastapi import Body, Depends, FastAPI, HTTPException, Request
+from fastapi import Cookie, Depends, FastAPI, HTTPException, Request, Response
 from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 import starlette.status as status
 from sqlalchemy.orm import Session
 from os import getenv
-from typing import Annotated
+from typing import Annotated, Union
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -67,7 +67,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 # User authentication and authorization
-async def get_current_user(token: Annotated[str, Body(embed=True)], db: Session = Depends(get_db)):
+async def get_current_user(token: Annotated[Union[str, None], Cookie()] = None, db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -93,7 +93,7 @@ async def root(request: Request) -> str:
     return RedirectResponse(url="docs", status_code=status.HTTP_302_FOUND)
 
 @app.post("/token")
-async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
+async def login(response: Response, form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
     user = crud.get_user_by_username(db, username=form_data.username)
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
@@ -102,7 +102,14 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: 
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+
+    response.set_cookie(key="token", value=access_token, expires=3600)
+    return {"message": "Authentication successful"}
+
+@app.post("/logout")
+def logout(response: Response, current_user: Annotated[schemas.User, Depends(get_current_user)]):
+    response.delete_cookie("token")
+    return {"message": "Logged out"}
 
 @app.post("/register")
 async def register(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):

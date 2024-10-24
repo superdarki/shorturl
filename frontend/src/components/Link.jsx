@@ -24,15 +24,12 @@ export default function Link() {
         if (link && reg.test(link)) {
             setValid(true);
             setSubmit(true);
-            const token = localStorage.getItem("token");
             const response = await fetch(api_url + "/create?url=" + encodeURIComponent(link), {
                 method: "POST",
+                credentials: 'include',
                 headers: {
                     "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    token: token
-                })
+                }
             });
             if (!response.ok) {
                 throw new Error('Request failed');
